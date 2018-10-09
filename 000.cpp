@@ -1,6 +1,9 @@
 #include<iostream>
 #include<queue>
 #include<fstream>
+#include<string>
+#include<vector>
+#include <sstream>
 #define MAX 10000
 
 using namespace std;
@@ -73,16 +76,51 @@ int main(int argc, char *argv[])
 {
     //input row and col
     int m,n;
+    int j;
+
     ifstream input("TA_matrix_3.data");
     ofstream fout("file.txt"); 
 
-    string matrix;
+    stringstream ss,s0,s1;
+	
+    vector<string> v;
 
-    cin>>m>>n; 
-    while( input >> matrix ) 
-    {    
-        fout<<matrix<<" ";
+    string matrix;
+    string m_and_n;
+    string buffer;
+
+    /*all the elements in matrix is in string matrix with space*/
+    do
+    {
+        getline(input,matrix);
+        v.push_back(matrix);
+        
+    }while(!input.eof());
+    /*got the m_and_n and matrix string here*/
+    ss<<v.at(0);
+    m_and_n=ss.str();
+    ss.str("");
+    ss << v.at(1);
+    matrix=ss.str();
+	ss.str("");
+    /*got the m and n here*/
+    for(int i=0;m_and_n[i]!=' ';i++)
+    {
+        buffer+=m_and_n[i];
+        j=i;
     }
+    s0<<buffer;
+    s0>>m;
+	s0.str("");
+    buffer.clear();
+    
+	for(int i=j+2;m_and_n[i]!='\0';i++)
+    {
+        buffer+=m_and_n[i];
+    }
+    s1<<buffer;
+    s1>>n;
+	/*got all the elements here in 2d array*/
     int a[][MAX] = {{11,10,10,10,10},
                     {10,10,10,10,11},
                     {10,11,10,10,10},
