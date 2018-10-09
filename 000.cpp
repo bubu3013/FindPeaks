@@ -73,17 +73,22 @@ int main(int argc, char *argv[])
 {
     //input row and col
     int m,n;
-    ifstream input;
-    string maxtrix;
-    string open="";
-    //argv[1]==>student ID
-    input.open(*argv[1]+"/matrix.data");
-    cin>>m>>n;
+    ifstream input("TA_matrix_3.data");
+    ofstream fout("file.txt"); 
+
+    string matrix;
+
+    cin>>m>>n; 
+    while( input >> matrix ) 
+    {    
+        fout<<matrix<<" ";
+    }
     int a[][MAX] = {{11,10,10,10,10},
                     {10,10,10,10,11},
                     {10,11,10,10,10},
                     {10,10,10,11,10},
                     {10,10,11,10,10}};
+    
     count_peaks(a,m,n,findPeak(a, m, n,n/2));
     return 0;
 }
