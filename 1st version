@@ -1,12 +1,12 @@
 #include<iostream>
 #include<queue>
-#include<string>
 #include<fstream>
+#include<string>
+#include<vector>
 #define MAX 10000
 
 using namespace std;
-
-//finding peak with binary search
+//finding peak with binary search mid is the col/2
 int findMax(int a[][MAX], int rows, int mid, int &max)
 {
     int peak_index = 0;
@@ -22,50 +22,45 @@ int findMax(int a[][MAX], int rows, int mid, int &max)
     }
     return peak_index;
 }
-
-// Function to find a peak element with binary search
-int findPeak(int a[][MAX],int rows,int columns,int mid)
+ // Function to find a peak element with binary search
+int findPeak(int arr[][MAX],int rows,int columns,int mid)
 {
-    //Evaluating maximum of mid column.
+    // Evaluating maximum of mid column.
     //max is passed by reference.
     int max = 0;
-    int max_index = findMax(a, rows, mid, max);
-
-    // If we are on the first or last column, max is a peak
+    int max_index = findMax(arr, rows, mid, max);
+     // If we are on the first or last column, max is a peak
     //??????
     if (mid == 0 || mid == columns-1)
         return max;
-
-    // If mid column maximum is also peak
-    if (max >= a[max_index][mid-1] &&
-            max >= a[max_index][mid+1])
+     // If mid column maximum is also peak
+    if (max >= arr[max_index][mid-1] &&
+            max >= arr[max_index][mid+1])
         return max;
-
-    // If max is less than its left
-    if (max < a[max_index][mid-1])
-        return findPeak(a, rows, columns, mid - mid/2);
-
-    // If max is less than its right
-    if (max < a[max_index][mid+1])
-        return findPeak(a, rows, columns, mid+mid/2);
+     // If max is less than its left
+    if (max < arr[max_index][mid-1])
+        return findPeak(arr, rows, columns, mid - mid/2);
+     // If max is less than its right
+    if (max < arr[max_index][mid+1])
+        return findPeak(arr, rows, columns, mid+mid/2);
 }
 int count_peaks(int a[][MAX],int m,int n,int peak)
 {
     int sum=0;
     queue<int> location;
-
-    //to convert array into string
-    string peak_in_string(&a[0][0],&a[m][n]+1);
-    cout<<peak_in_string<<endl;
-    
-    //but it doesn't work
-    for (int iter=peak_in_string.find_first_of((char)peak);iter<m*n;iter++)
+     //peak_location initialize in the
+    int* peak_location = &a[0][0];
+    //to find x from peak_location to peak_location+rows*cols
+    for (int i=0;i<m;i++)
     {
-        if ((int)peak_in_string[iter]==peak)
+        for (int j=0;j<n;j++)
         {
-            cout<<iter<<endl;
-            location.push(iter/m);
-            location.push(iter%n);
+            if (a[i][j]==peak)
+            {
+                location.push(i);
+                location.push(j);
+                sum++;
+            }
         }
     }
     for (int i=0;i<sum*2;i++)
@@ -76,22 +71,31 @@ int count_peaks(int a[][MAX],int m,int n,int peak)
     }
     //cout<<peak<<endl;
 }
-// Driver Code
-int main()
+int main(int argc, char *argv[])
 {
     //input row and col
     int m,n;
-    //fstream file;
-    //file.open("matrix.data");
+    ifstream input("TA_matrix_3.data");
+    ofstream fout("file.txt"); 
+    vector<string> v1;
+    string matrix;
 
     cin>>m>>n;
+    //no string  
+
+    do
+    {
+        getline(input,matrix);
+        v1.push_back(matrix);
+        
+    }while(!input.eof());
 
     int a[][MAX] = {{11,10,10,10,10},
-                     {10,10,10,10,11},
-                     {10,11,10,10,10},
-                     {10,10,10,11,10},
+                    {10,10,10,10,11},
+                    {10,11,10,10,10},
+                    {10,10,10,11,10},
                     {10,10,11,10,10}};
-
+    
     count_peaks(a,m,n,findPeak(a, m, n,n/2));
     return 0;
 }
