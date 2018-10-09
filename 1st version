@@ -3,6 +3,7 @@
 #include<fstream>
 #include<string>
 #include<vector>
+#include <sstream>
 #define MAX 10000
 
 using namespace std;
@@ -75,20 +76,36 @@ int main(int argc, char *argv[])
 {
     //input row and col
     int m,n;
+
     ifstream input("TA_matrix_3.data");
     ofstream fout("file.txt"); 
-    vector<string> v1;
-    string matrix;
 
+    stringstream ss;
+
+    vector<string> v;
+
+    string matrix;
+    string m_and_n;
+    
     cin>>m>>n;
-    //no string  
 
     do
     {
         getline(input,matrix);
-        v1.push_back(matrix);
+        v.push_back(matrix);
         
     }while(!input.eof());
+    ss<<v.at(0);
+    m_and_n=ss.str();
+    ss.str("");
+    //now all the elements in matrix is in string matrix with space
+	cout<<m_and_n<<endl;
+    ss << v.at(1);
+
+    matrix=ss.str();
+	cout<<matrix<<endl;
+	
+    system("Pause");
 
     int a[][MAX] = {{11,10,10,10,10},
                     {10,10,10,10,11},
