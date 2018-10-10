@@ -33,7 +33,6 @@ int findPeak(vector<vector<int> > arr,int rows,int columns,int mid)
     int max = 0;
     int max_index = findMax(arr, rows, mid, max);
      // If we are on the first or last column, max is a peak
-    //??????
     if (mid == 0 || mid == columns-1)
         return max;
      // If mid column maximum is also peak
@@ -50,10 +49,8 @@ int findPeak(vector<vector<int> > arr,int rows,int columns,int mid)
 int count_peaks(vector<vector<int> > a,int m,int n,int peak)
 {
 	int sum=0;
-     //peak_location initialize in the
-    int* peak_location = &a[0][0];
     //to find x from peak_location to peak_location+rows*cols
-    for (int i=0;i<m;i++)
+    for (int i=1;i<=m;i++)
     {
         for (int j=0;j<n;j++)
         {
@@ -65,13 +62,6 @@ int count_peaks(vector<vector<int> > a,int m,int n,int peak)
             }
         }
     }
-    /*for (int i=0;i<sum*2;i++)
-    {
-        cout<<location.front()<<" ";
-        location.pop();
-        if (i%2==1)cout<<endl;
-    }*/
-    //cout<<peak<<endl;
 }
 int main(int argc, char *argv[])
 {
@@ -135,32 +125,43 @@ int main(int argc, char *argv[])
     {
         while(file.good())
         {
-            if(j>1)
+        	a.push_back(rowVector);
+			if (row==0)
+			{
+				for (int col=0;col<2;++col)
+				{
+					file>>a[row][col];
+				}
+			}
+            else
             {
-                a.push_back(rowVector);
                 for (int col=0;col<n;col++)
                 {
                     file>>a[row][col];
                 }
-                row++;
             }
-            j++;
+            row++;
         }
     }
     file.close();
     
     count_peaks(a,m,n,findPeak(a, m, n,n/2));
-    
+
     q_size=location.size();
 
 	fout<<q_size/2<<endl;
     
-   for (int i=0;i<q_size;i++)
+    for (int i=0;i<q_size;i++)
     {
-        fout<<location.front();
+        if (i%2==0)
+		{
+			fout<<location.front()-1<<" ";
+		}
+		else if (i%2==1)
+		{	
+			fout<<location.front()<<endl;
+		}
         location.pop();
-        if (i%2==0)fout<<" ";
-		else if (i%2==1)fout<<endl;
     }
     
     return 0;
