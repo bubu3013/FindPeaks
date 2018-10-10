@@ -7,8 +7,10 @@
 #define MAX 10000
 
 using namespace std;
+queue<int> location;
+
 //finding peak with binary search mid is the col/2
-int findMax(int a[][MAX], int rows, int mid, int &max)
+int findMax(vector<vector<int> > a, int rows, int mid, int &max)
 {
     int peak_index = 0;
     for (int i = 0; i < rows; i++)
@@ -24,7 +26,7 @@ int findMax(int a[][MAX], int rows, int mid, int &max)
     return peak_index;
 }
  // Function to find a peak element with binary search
-int findPeak(int arr[][MAX],int rows,int columns,int mid)
+int findPeak(vector<vector<int> > arr,int rows,int columns,int mid)
 {
     // Evaluating maximum of mid column.
     //max is passed by reference.
@@ -45,10 +47,9 @@ int findPeak(int arr[][MAX],int rows,int columns,int mid)
     if (max < arr[max_index][mid+1])
         return findPeak(arr, rows, columns, mid+mid/2);
 }
-int count_peaks(int a[][MAX],int m,int n,int peak)
+int count_peaks(vector<vector<int> > a,int m,int n,int peak)
 {
-    int sum=0;
-    queue<int> location;
+	int sum=0;
      //peak_location initialize in the
     int* peak_location = &a[0][0];
     //to find x from peak_location to peak_location+rows*cols
@@ -64,12 +65,12 @@ int count_peaks(int a[][MAX],int m,int n,int peak)
             }
         }
     }
-    for (int i=0;i<sum*2;i++)
+    /*for (int i=0;i<sum*2;i++)
     {
         cout<<location.front()<<" ";
         location.pop();
         if (i%2==1)cout<<endl;
-    }
+    }*/
     //cout<<peak<<endl;
 }
 int main(int argc, char *argv[])
@@ -77,18 +78,25 @@ int main(int argc, char *argv[])
     //input row and col
     int m,n;
     int j;
-
+    int row=0,col=0;
+    int q_size;
+    
+    fstream file; 
     ifstream input("TA_matrix_3.data");
     ofstream fout("file.txt"); 
 
     stringstream ss,s0,s1;
 	
     vector<string> v;
+    vector<vector<int> > a;
+    //vector<int> rowVector;
 
     string matrix;
     string m_and_n;
     string buffer;
 
+    file.open("TA_matrix_3.data",ios::in);
+    
     /*all the elements in matrix is in string matrix with space*/
     do
     {
@@ -120,13 +128,40 @@ int main(int argc, char *argv[])
     }
     s1<<buffer;
     s1>>n;
+    j=0;
 	/*got all the elements here in 2d array*/
-    int a[][MAX] = {{11,10,10,10,10},
-                    {10,10,10,10,11},
-                    {10,11,10,10,10},
-                    {10,10,10,11,10},
-                    {10,10,11,10,10}};
+    vector<int> rowVector(n);
+    if (file.is_open())
+    {
+        while(file.good())
+        {
+            if(j>1)
+            {
+                a.push_back(rowVector);
+                for (int col=0;col<n;col++)
+                {
+                    file>>a[row][col];
+                }
+                row++;
+            }
+            j++;
+        }
+    }
+    file.close();
     
     count_peaks(a,m,n,findPeak(a, m, n,n/2));
+    
+    q_size=location.size();
+
+	fout<<q_size/2<<endl;
+    
+   for (int i=0;i<q_size;i++)
+    {
+        fout<<location.front();
+        location.pop();
+        if (i%2==0)fout<<" ";
+		else if (i%2==1)fout<<endl;
+    }
+    
     return 0;
 }
